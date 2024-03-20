@@ -2,6 +2,7 @@ import socket
 import yaml
 import logging
 import struct
+import time
 from homeassistant.util import Throttle
 from datetime import datetime
 from .parser import ParameterParser
@@ -87,9 +88,10 @@ class Inverter:
                     except Exception as e:
                         result = 0
                         log.warning(f"Querying [{range_string}] failed with exception [{type(e).__name__}: {e}]")
-                        self.disconnect_from_server()
+                        #self.disconnect_from_server() #This one does not seem to get called
                     if result == 0:
                         log.warning(f"Querying [{range_string}] failed, [{attempts_left}] retry attempts left")
+                        time.sleep(10)
                     else:
                         log.debug(f"Querying [{range_string}] succeeded")
                         break
